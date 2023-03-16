@@ -11,6 +11,7 @@
     nano default
    
 Установить Apache. Настроить обработку PHP. Добиться одновременной работы с Nginx.
+    
     apt install apache2
     systemctl start apache2
     /etc/apache2/ports.conf
