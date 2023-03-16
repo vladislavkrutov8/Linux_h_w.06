@@ -27,3 +27,33 @@
     LISTEN             0                   511                                          *:8080                                      *:*                 users:(("apache2",pid=3941,fd=4),("apache2",pid=3940,fd=4),("apache2",pid=3939,fd=4))
     LISTEN             0                   128                                      [::1]:631                                    [::]:*                 users:(("cupsd",pid=743,fd=6))
 root@vladislav-linux:/etc/apache2# ll
+
+Настроить схему обратного прокси для Nginx (динамика - на Apache).
+    
+    <VirtualHost 127.0.0.1:8080>
+
+
+
+     DocumentRoot /var/www/
+     ServerName example.com
+     ErrorLog /var/log/apache2/example_error.log
+     CustomLog /var/log/apache2/example_access.log common
+     <Directory /var/www/>
+             Options FollowSymLinks
+             AllowOverride All
+             #Следующие 2 строки не будут работать в apache >= 2.4, необходимо использовать директиву Require all granted
+             #Order allow,deny
+             #Allow from all
+             Require all granted
+     </Directory>
+    </VirtualHost>
+
+    a2ensite example-apache.conf && service apache2 start
+    mkdir -p /var/www/ && echo '<?php phpinfo();' > /var/www/index.php
+    
+Установить MySQL. Создать новую базу данных и таблицу в ней
+
+    [mysql]
+    user=root
+    password=
+
